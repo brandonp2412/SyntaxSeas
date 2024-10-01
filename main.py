@@ -11,17 +11,19 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ocean Crossing")
 
 # Colors
-BLUE = (0, 0, 255)
-BROWN = (139, 69, 19)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-WHITE = (255, 255, 255)
+OCEAN_BLUE = (0, 105, 148)
+LIGHT_BLUE = (173, 216, 230)
+SAND_COLOR = (238, 214, 175)
+HULL_COLOR = (101, 67, 33)
+SAIL_COLOR = (255, 255, 224)
+LOG_COLOR = (160, 82, 45)
+TEXT_COLOR = (255, 69, 0)
 
 # Player
-player_width = 40
+player_width = 60
 player_height = 60
-player = pygame.Rect(WIDTH // 2 - player_width // 2, HEIGHT - player_height - 10, player_width, player_height)
-player_speed = 5
+player = pygame.Rect(WIDTH // 2 - player_width // 2, HEIGHT - player_height - 60, player_width, player_height)
+player_speed = 10
 
 # Logs
 log_width = 100
@@ -36,13 +38,13 @@ win = False
 
 def draw_sailboat(screen, x, y, width, height):
     # Draw the hull
-    pygame.draw.polygon(screen, (139, 69, 19), [(x, y + height), (x + width, y + height), (x + width//2, y + height//2)])
+    pygame.draw.polygon(screen, HULL_COLOR, [(x, y + height), (x + width, y + height), (x + width//2, y + height//2)])
     
     # Draw the sail
-    pygame.draw.polygon(screen, WHITE, [(x + width//2, y + height//2), (x + width//2, y), (x + width, y + height//2)])
+    pygame.draw.polygon(screen, SAIL_COLOR, [(x + width//2, y + height//2), (x + width//2, y), (x + width, y + height//2)])
     
     # Draw the mast
-    pygame.draw.line(screen, (101, 67, 33), (x + width//2, y + height//2), (x + width//2, y), 2)
+    pygame.draw.line(screen, HULL_COLOR, (x + width//2, y + height//2), (x + width//2, y), 2)
 
 def create_log():
     y = random.randint(100, HEIGHT - 150)
@@ -55,13 +57,20 @@ def move_logs():
         if log.right < 0:
             logs.remove(log)
 
+def draw_gradient_background():
+    for y in range(HEIGHT):
+        r = int(OCEAN_BLUE[0] * (1 - y/HEIGHT) + LIGHT_BLUE[0] * (y/HEIGHT))
+        g = int(OCEAN_BLUE[1] * (1 - y/HEIGHT) + LIGHT_BLUE[1] * (y/HEIGHT))
+        b = int(OCEAN_BLUE[2] * (1 - y/HEIGHT) + LIGHT_BLUE[2] * (y/HEIGHT))
+        pygame.draw.line(screen, (r, g, b), (0, y), (WIDTH, y))
+
 def draw_objects():
-    screen.fill(BLUE)
-    pygame.draw.rect(screen, GREEN, (0, 0, WIDTH, 50))  # Start area
-    pygame.draw.rect(screen, GREEN, (0, HEIGHT - 50, WIDTH, 50))  # End area
+    draw_gradient_background()
+    pygame.draw.rect(screen, SAND_COLOR, (0, 0, WIDTH, 50))  # Start area
+    pygame.draw.rect(screen, SAND_COLOR, (0, HEIGHT - 50, WIDTH, 50))  # End area
     draw_sailboat(screen, player.x, player.y, player_width, player_height)
     for log in logs:
-        pygame.draw.rect(screen, BROWN, log)
+        pygame.draw.rect(screen, LOG_COLOR, log)
 
 def check_collision():
     player_hitbox = pygame.Rect(player.x + player_width//4, player.y + player_height//2, player_width//2, player_height//2)
@@ -69,7 +78,6 @@ def check_collision():
         if player_hitbox.colliderect(log):
             return True
     return False
-
 
 # Main game loop
 running = True
@@ -107,12 +115,12 @@ while running:
 
     if game_over:
         font = pygame.font.Font(None, 74)
-        text = font.render("Game Over!", True, RED)
+        text = font.render("Game Over!", True, TEXT_COLOR)
         screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
 
     if win:
         font = pygame.font.Font(None, 74)
-        text = font.render("You Win!", True, GREEN)
+        text = font.render("You Win!", True, TEXT_COLOR)
         screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
 
     pygame.display.flip()
