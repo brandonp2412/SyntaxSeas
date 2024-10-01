@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 # Initialize Pygame
 pygame.init()
@@ -14,7 +15,6 @@ pygame.display.set_caption("Syntax Seas")
 OCEAN_BLUE = (0, 105, 148)
 LIGHT_BLUE = (173, 216, 230)
 SAND_COLOR = (238, 214, 175)
-LOG_COLOR = (160, 82, 45)
 TEXT_COLOR = (255, 69, 0)
 
 # Player
@@ -28,8 +28,8 @@ sailboat_sprite = pygame.image.load('sail.png')
 sailboat_sprite = pygame.transform.scale(sailboat_sprite, (player_width, player_height))
 
 # Logs
-log_width = 100
-log_height = 40
+log_width = 120
+log_height = 30
 log_speed = 3
 logs = []
 
@@ -40,13 +40,17 @@ win = False
 
 def create_log():
     y = random.randint(100, HEIGHT - 150)
-    log = pygame.Rect(WIDTH, y, log_width, log_height)
+    log = {
+        'rect': pygame.Rect(WIDTH, y, log_width, log_height),
+        'color': (random.randint(100, 160), random.randint(50, 82), random.randint(20, 45)),
+        'rings': random.randint(3, 6)
+    }
     logs.append(log)
 
 def move_logs():
     for log in logs:
-        log.x -= log_speed
-        if log.right < 0:
+        log['rect'].x -= log_speed
+        if log['rect'].right < 0:
             logs.remove(log)
 
 def draw_gradient_background():
@@ -56,18 +60,38 @@ def draw_gradient_background():
         b = int(OCEAN_BLUE[2] * (1 - y/HEIGHT) + LIGHT_BLUE[2] * (y/HEIGHT))
         pygame.draw.line(screen, (r, g, b), (0, y), (WIDTH, y))
 
+def draw_log(surface, log):
+    pygame.draw.ellipse(surface, log['color'], log['rect'])
+    
+    # Draw log ends
+    end_color = tuple(max(0, c-20) for c in log['color'])
+    pygame.draw.ellipse(surface, end_color,
+                        (log['rect'].left, log['rect'].top, log['rect'].height, log['rect'].height))
+    pygame.draw.ellipse(surface, end_color,
+                        (log['rect'].right-log['rect'].height, log['rect'].top, log['rect'].height, log['rect'].height))
+    
+    # Draw rings
+    ring_color = tuple(max(0, c-40) for c in log['color'])
+    for i in range(log['rings']):
+        ring_pos = log['rect'].width * (i + 1) / (log['rings'] + 1)
+        pygame.draw.arc(surface, ring_color,
+                        (log['rect'].left + ring_pos - 5, log['rect'].top, 10, log['rect'].height),
+                        math.pi/2, 3*math.pi/2, 2)
+
 def draw_objects():
     draw_gradient_background()
     pygame.draw.rect(screen, SAND_COLOR, (0, 0, WIDTH, 50))  # Start area
     pygame.draw.rect(screen, SAND_COLOR, (0, HEIGHT - 50, WIDTH, 50))  # End area
     screen.blit(sailboat_sprite, (player.x, player.y))
     for log in logs:
-        pygame.draw.rect(screen, LOG_COLOR, log)
+        draw_log(screen, log)
 
 def check_collision():
     player_hitbox = pygame.Rect(player.x + player_width//4, player.y + player_height//2, player_width//2, player_height//2)
     for log in logs:
-        if player_hitbox.colliderect(log):
+        log_hitbox = pygame.Rect(log['rect'].left + log['rect'].height//2, log['rect'].top,
+                                 log['rect'].width - log['rect'].height, log['rect'].height)
+        if player_hitbox.colliderect(log_hitbox):
             return True
     return False
 
