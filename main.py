@@ -8,7 +8,7 @@ pygame.init()
 WIDTH = 800
 HEIGHT = 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Ocean Crossing")
+pygame.display.set_caption("Syntax Seas")
 
 # Colors
 OCEAN_BLUE = (0, 105, 148)
@@ -96,6 +96,8 @@ while running:
             player.y -= player_speed
         if keys[pygame.K_DOWN] and player.bottom < HEIGHT:
             player.y += player_speed
+        if keys[pygame.K_q]:
+            running = False
 
         # Create new logs
         if random.randint(1, 60) == 1:
