@@ -14,8 +14,6 @@ pygame.display.set_caption("Syntax Seas")
 OCEAN_BLUE = (0, 105, 148)
 LIGHT_BLUE = (173, 216, 230)
 SAND_COLOR = (238, 214, 175)
-HULL_COLOR = (101, 67, 33)
-SAIL_COLOR = (255, 255, 224)
 LOG_COLOR = (160, 82, 45)
 TEXT_COLOR = (255, 69, 0)
 
@@ -24,6 +22,10 @@ player_width = 60
 player_height = 60
 player = pygame.Rect(WIDTH // 2 - player_width // 2, HEIGHT - player_height - 60, player_width, player_height)
 player_speed = 10
+
+# Load and scale the sailboat sprite
+sailboat_sprite = pygame.image.load('sail.png')
+sailboat_sprite = pygame.transform.scale(sailboat_sprite, (player_width, player_height))
 
 # Logs
 log_width = 100
@@ -35,16 +37,6 @@ logs = []
 clock = pygame.time.Clock()
 game_over = False
 win = False
-
-def draw_sailboat(screen, x, y, width, height):
-    # Draw the hull
-    pygame.draw.polygon(screen, HULL_COLOR, [(x, y + height), (x + width, y + height), (x + width//2, y + height//2)])
-    
-    # Draw the sail
-    pygame.draw.polygon(screen, SAIL_COLOR, [(x + width//2, y + height//2), (x + width//2, y), (x + width, y + height//2)])
-    
-    # Draw the mast
-    pygame.draw.line(screen, HULL_COLOR, (x + width//2, y + height//2), (x + width//2, y), 2)
 
 def create_log():
     y = random.randint(100, HEIGHT - 150)
@@ -68,7 +60,7 @@ def draw_objects():
     draw_gradient_background()
     pygame.draw.rect(screen, SAND_COLOR, (0, 0, WIDTH, 50))  # Start area
     pygame.draw.rect(screen, SAND_COLOR, (0, HEIGHT - 50, WIDTH, 50))  # End area
-    draw_sailboat(screen, player.x, player.y, player_width, player_height)
+    screen.blit(sailboat_sprite, (player.x, player.y))
     for log in logs:
         pygame.draw.rect(screen, LOG_COLOR, log)
 
