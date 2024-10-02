@@ -13,3 +13,6 @@ ages.append(18)
 print(ages)
 
 # What does ages look like now?
+
+for index in range(0 , len(people)):
+    print('Person:' , people[index] , 'is' , ages[index],sep='\t')
