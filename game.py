@@ -96,8 +96,12 @@ def run_game(player_speed=10, log_speed=3, caption='Syntax seas'):
             if event.type == pygame.QUIT:
                 running = False
 
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_q]:
+            running = False
+
         if not game_over and not win:
-            keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT] and player.left > 0:
                 player.x -= player_speed
             if keys[pygame.K_RIGHT] and player.right < WIDTH:
@@ -106,8 +110,6 @@ def run_game(player_speed=10, log_speed=3, caption='Syntax seas'):
                 player.y -= player_speed
             if keys[pygame.K_DOWN] and player.bottom < HEIGHT:
                 player.y += player_speed
-            if keys[pygame.K_q]:
-                running = False
 
             if random.randint(1, 60) == 1:
                 create_log(logs)
@@ -128,9 +130,18 @@ def run_game(player_speed=10, log_speed=3, caption='Syntax seas'):
             screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
 
         if win:
-            font = pygame.font.Font(None, 74)
-            text = font.render("You Win!", True, TEXT_COLOR)
-            screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+            font_large = pygame.font.Font(None, 74)
+            font_small = pygame.font.Font(None, 36)
+
+            win_text = font_large.render("You Win!", True, TEXT_COLOR)
+            quit_text = font_small.render("Press 'q' to quit", True, TEXT_COLOR)
+
+            win_text_rect = win_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 20))
+            quit_text_rect = quit_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 40))
+
+            screen.blit(win_text, win_text_rect)
+            screen.blit(quit_text, quit_text_rect)
+
 
         pygame.display.flip()
         clock.tick(60)
