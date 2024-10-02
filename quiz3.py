@@ -20,3 +20,6 @@ days = 7
 
 print('There are:', year / days * weekends, 'weekends in a year (BEDMAS quiz)')
 
+weekends = year / days * weekends
+
+print('There are:', weekends, 'weekends in a year (BEDMAS quiz)')
