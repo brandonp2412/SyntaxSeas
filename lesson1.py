@@ -1,3 +1,5 @@
+# Lesson 1 - Types
+
 from game import run_game
 
 player_speed = 5
