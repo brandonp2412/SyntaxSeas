@@ -22,4 +22,4 @@ print('There are:', year / days, 'weeks in a year (division)')
 
 # Let's shorten that number...
 
-print('There are:', year // days, 'weeks in a year (division)')
+print('There are:', year // days, 'weeks in a year (floor)')
