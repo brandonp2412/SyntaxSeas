@@ -11,11 +11,11 @@ width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Animal mathematics")
 
-# List the dogs
+# Make dog images
 dogs = []
 for index in range(1, 6):
-    dog_image = pygame.image.load(f"dog{index}.jpg")  # Make sure you have a dog.png file in the same directory
-    dog_image = pygame.transform.scale(dog_image, (100, 100))  # Resize the image
+    dog_image = pygame.image.load(f"dog{index}.jpg")
+    dog_image = pygame.transform.scale(dog_image, (100, 100))
     dogs.append(dog_image)
 
 # Generate a random number of dogs (between 1 and 5)
