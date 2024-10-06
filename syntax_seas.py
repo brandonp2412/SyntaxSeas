@@ -95,7 +95,7 @@ def run_game(player_speed=10, log_speed=3, caption='Syntax seas'):
             if keys[pygame.K_DOWN] and player.bottom < HEIGHT:
                 player.y += player_speed
 
-            if random.randint(1, 60) == 1:
+            if random.randint(1, 30) == 1:
                 create_log(logs)
 
             move_logs(logs, log_speed)
