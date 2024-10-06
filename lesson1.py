@@ -1,6 +1,6 @@
 # Lesson 1 - Types
 
-from game import run_game
+from syntax_seas import run_game
 
 player_speed = 5
 log_speed = 10
