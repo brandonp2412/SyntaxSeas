@@ -15,4 +15,4 @@ print(ages)
 
 # What will this output?
 for index in range(0 , len(people)):
-    print('Person:' , people[index] , 'is' , ages[index],sep='\t')
+    print('Person:', people[index], 'is', ages[index], sep='\t')
