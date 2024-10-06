@@ -1,4 +1,4 @@
-# What type is name?
+# What type is this?
 statement = 'Ahoy matey!'
 
 # What type is age?
