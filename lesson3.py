@@ -21,7 +21,7 @@ for index in range(1, 6):
     dogs.append(dog_image)
 
 # Generate a random number of dogs (between 1 and 5)
-num_dogs = random.randint(1, 5)
+num_dogs = random.randint(0, 5)
 
 # Calculate the vertical space available
 available_height = height - (num_dogs * dog_height) - 100
@@ -35,7 +35,7 @@ else:
 # Generate positions
 dog_positions = []
 for i in range(num_dogs):
-    x = random.randint(0, width - dog_width)
+    x = width
     y = i * (dog_height + gap)
     dog_positions.append((width // 2, y))
 
