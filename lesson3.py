@@ -13,16 +13,31 @@ pygame.display.set_caption("Animal mathematics")
 
 # Make dog images
 dogs = []
+dog_height = 100
+dog_width = 100
 for index in range(1, 6):
     dog_image = pygame.image.load(f"dog{index}.jpg")
-    dog_image = pygame.transform.scale(dog_image, (100, 100))
+    dog_image = pygame.transform.scale(dog_image, (dog_width, dog_height))
     dogs.append(dog_image)
 
 # Generate a random number of dogs (between 1 and 5)
 num_dogs = random.randint(1, 5)
 
-# Create a list of random positions for the dogs
-dog_positions = [(random.randint(0, width - 100), random.randint(0, height - 200)) for dog in range(num_dogs)]
+# Calculate the vertical space available
+available_height = height - (num_dogs * dog_height) - 100
+
+# Calculate the vertical gap between dogs
+if num_dogs > 1:
+    gap = available_height / (num_dogs - 1)
+else:
+    gap = 0
+
+# Generate positions
+dog_positions = []
+for i in range(num_dogs):
+    x = random.randint(0, width - dog_width)
+    y = i * (dog_height + gap)
+    dog_positions.append((width // 2, y))
 
 running = True
 while running:
@@ -40,7 +55,10 @@ while running:
         screen.blit(dogs[index], dog_positions[index])
 
     # Create the text
-    text = f"There are {num_dogs} dogs"
+    if num_dogs > 1:
+        text = f"There are {num_dogs} dogs"
+    else:
+        text = "There is only 1 dog"
     font = pygame.font.Font(None, 36)
     BLACK = (0, 0, 0)
     text_surface = font.render(text, True, BLACK)
