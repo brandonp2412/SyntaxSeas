@@ -7,7 +7,7 @@ HEIGHT = 600
 OCEAN_BLUE = (0, 105, 148)
 LIGHT_BLUE = (173, 216, 230)
 SAND_COLOR = (238, 214, 175)
-TEXT_COLOR = (255, 69, 0)
+TEXT_COLOR = (204, 55, 0)
 
 # Game state
 player_width = 60
@@ -47,17 +47,10 @@ def move_logs(logs, speed):
         if log['rect'].right < 0:
             logs.remove(log)
 
-def draw_gradient_background(screen):
-    for y in range(HEIGHT):
-        r = int(OCEAN_BLUE[0] * (1 - y/HEIGHT) + LIGHT_BLUE[0] * (y/HEIGHT))
-        g = int(OCEAN_BLUE[1] * (1 - y/HEIGHT) + LIGHT_BLUE[1] * (y/HEIGHT))
-        b = int(OCEAN_BLUE[2] * (1 - y/HEIGHT) + LIGHT_BLUE[2] * (y/HEIGHT))
-        pygame.draw.line(screen, (r, g, b), (0, y), (WIDTH, y))
-
 def draw_objects(screen, player, sailboat_sprite, log_sprite, logs):
-    draw_gradient_background(screen)
-    pygame.draw.rect(screen, SAND_COLOR, (0, 0, WIDTH, 50))
-    pygame.draw.rect(screen, SAND_COLOR, (0, HEIGHT - 50, WIDTH, 50))
+    ocean = pygame.image.load('ocean.jpeg')
+    ocean = pygame.transform.scale(ocean, (WIDTH, HEIGHT))
+    screen.blit(ocean, (0, 0))
     screen.blit(sailboat_sprite, (player.x, player.y))
     for log in logs:
         screen.blit(log_sprite, log['rect'])
@@ -84,6 +77,11 @@ def run_game(player_speed=10, log_speed=3, caption='Syntax seas'):
 
         if keys[pygame.K_q]:
             running = False
+            
+        if keys[pygame.K_r]:
+            game_over = False
+            win = False
+            player = pygame.Rect(WIDTH // 2 - player_width // 2, HEIGHT - player_height - 60, player_width, player_height)
 
         if not game_over and not win:
             if keys[pygame.K_LEFT] and player.left > 0:
@@ -103,14 +101,18 @@ def run_game(player_speed=10, log_speed=3, caption='Syntax seas'):
             if check_collision(player, logs):
                 game_over = True
 
-            if player.top <= 50:
+            if player.top <= 0:
                 win = True
 
         draw_objects(screen, player, sailboat_sprite, log_sprite, logs)
 
         if game_over:
             font = pygame.font.Font(None, 74)
+            font_small = pygame.font.Font(None, 36)
             text = font.render("Game Over!", True, TEXT_COLOR)
+            quit_text = font_small.render("Press 'q' to quit, 'r' to restart", True, TEXT_COLOR)
+            quit_text_rect = quit_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 40))
+            screen.blit(quit_text, quit_text_rect)
             screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
 
         if win:
@@ -118,7 +120,7 @@ def run_game(player_speed=10, log_speed=3, caption='Syntax seas'):
             font_small = pygame.font.Font(None, 36)
 
             win_text = font_large.render("You Win!", True, TEXT_COLOR)
-            quit_text = font_small.render("Press 'q' to quit", True, TEXT_COLOR)
+            quit_text = font_small.render("Press 'q' to quit, 'r' to restart", True, TEXT_COLOR)
 
             win_text_rect = win_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 20))
             quit_text_rect = quit_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 40))
@@ -130,3 +132,6 @@ def run_game(player_speed=10, log_speed=3, caption='Syntax seas'):
         clock.tick(60)
 
     pygame.quit()
+    
+if __name__ == '__main__':
+    run_game()
