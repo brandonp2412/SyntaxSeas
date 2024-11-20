@@ -24,5 +24,5 @@ python3 -m pip install -U pygame --user
 
 ```sh
 cd SyntaxSeas
-python lesson1.py
+python types1.py
 ```
