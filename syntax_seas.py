@@ -7,7 +7,7 @@ HEIGHT = 600
 OCEAN_BLUE = (0, 105, 148)
 LIGHT_BLUE = (173, 216, 230)
 SAND_COLOR = (238, 214, 175)
-TEXT_COLOR = (204, 55, 0)
+TEXT_COLOR = (255, 105, 50)
 
 # Game state
 player_width = 60
@@ -48,7 +48,7 @@ def move_logs(logs, speed):
             logs.remove(log)
 
 def draw_objects(screen, player, sailboat_sprite, log_sprite, logs):
-    ocean = pygame.image.load('ocean.jpeg')
+    ocean = pygame.image.load('ocean.png')
     ocean = pygame.transform.scale(ocean, (WIDTH, HEIGHT))
     screen.blit(ocean, (0, 0))
     screen.blit(sailboat_sprite, (player.x, player.y))
