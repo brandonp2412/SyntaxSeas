@@ -9,6 +9,7 @@ favorite_youtuber = {
 # This is how you modify a dictionary
 del favorite_youtuber['name']
 del favorite_youtuber['time']
+
 favorite_youtuber['name'] = 'Mr. beast'
 favorite_youtuber['time'] = 999999999
 
