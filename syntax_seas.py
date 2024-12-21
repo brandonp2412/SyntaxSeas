@@ -21,7 +21,7 @@ def init_game(caption='Syntax seas'):
     pygame.display.set_caption(caption)
     
     player = pygame.Rect(WIDTH // 2 - player_width // 2, HEIGHT - player_height - 60, player_width, player_height)
-    sailboat_sprite = pygame.image.load('sail.png')
+    sailboat_sprite = pygame.image.load('sailboat.png')
     sailboat_sprite = pygame.transform.scale(sailboat_sprite, (player_width, player_height))
     
     log_sprite = pygame.image.load('log.png')
